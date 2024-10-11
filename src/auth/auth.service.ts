@@ -5,7 +5,7 @@ import { UsersService } from '../users/users.service';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import { isEmptyOrUndefinedOrNull } from '../common/utils/EmptyOrUndefinedOrNull.utils';
 import { User } from '../users/entities/user.entity';
-import { EventsService } from 'src/events/events.service';
+import { EventsService } from '../events/events.service';
 
 @Injectable()
 export class AuthService {
