@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String   @unique
+  password   String
+  deleted    Boolean? @default(false)
+  profile    Profile?
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Profile {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String    @unique
+  emailVerified Boolean?  @default(false)
+  enabled       Boolean?  @default(false)
+  phone         String?
+  phoneVerified Boolean?  @default(false)
+  user          User?     @relation(fields: [userId], references: [id])
+  userId        String    @unique @db.ObjectId
+  address       Address[]
+  image         String?
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Address {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  location   Location?    @relation(fields: [locationId], references: [id])
+  locationId String?      @unique @db.ObjectId
+  profile    Profile?     @relation(fields: [profileId], references: [id])
+  profileId  String?      @unique @db.ObjectId
+  type       AddressType?
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Location {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  lat          Int
+  lng          Int
+  display_name String
+  place_id     String
+  city         String
+  country      String
+  code         String
+  address      Address?
+  addressId    String   @db.ObjectId
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+enum AddressType {
+  HOME
+  OFFICE
+  OTHER
+}

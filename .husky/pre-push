@@ -1,0 +1,4 @@
+# .husky/pre-push
+
+
+yarn test && yarn release

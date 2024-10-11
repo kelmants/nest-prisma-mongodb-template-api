@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+    postgres:
+        image: postgres:latest
+        restart: always
+        container_name: template-api
+        hostname: pgsqlprc
+        environment:
+          - POSTGRES_USER=root
+          - POSTGRES_PASSWORD=Aa123456
+        ports:
+          - '5432:5432'
+        volumes:
+          - postgres_data:/backup/data
+volumes:
+    postgres_data:
